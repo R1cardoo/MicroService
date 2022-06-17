@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: comments-depl
+spec:
+  replicas: 1 # pod的数量
+  selector: # 识别template中的命名，做绑定
+    matchLabels:
+      app: comments
+  template: #命名
+    metadata:
+      labels:
+        app: comments
+    spec: # pod的配置
+      containers:
+        - name: comments
+          image: ricardo0816/comments # default = latest
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: comments-srv
+spec:
+  selector:
+    app: comments
+  type: ClusterIP # 默认值 不需要写出
+  ports:
+    - name: comments
+      protocol: TCP
+      port: 4001
+      targetPort: 4001

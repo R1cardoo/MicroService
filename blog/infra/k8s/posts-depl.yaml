@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: posts-depl
+spec:
+  replicas: 1 # pod的数量
+  selector: # 识别template中的命名，做绑定
+    matchLabels:
+      app: posts
+  template: #命名
+    metadata:
+      labels:
+        app: posts
+    spec: # pod的配置
+      containers:
+        - name: posts
+          image: ricardo0816/posts # default = latest
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: posts-clusterip-srv
+spec:
+  selector:
+    app: posts
+  ports:
+    - name: posts
+      protocol: TCP
+      port: 4000
+      targetPort: 4000

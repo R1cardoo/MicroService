@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: query-depl
+spec:
+  replicas: 1 # pod的数量
+  selector: # 识别template中的命名，做绑定
+    matchLabels:
+      app: query
+  template: #命名
+    metadata:
+      labels:
+        app: query
+    spec: # pod的配置
+      containers:
+        - name: query
+          image: ricardo0816/query # default = latest
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: query-srv
+spec:
+  selector:
+    app: query
+  type: ClusterIP # 默认值 不需要写出
+  ports:
+    - name: query
+      protocol: TCP
+      port: 4002
+      targetPort: 4002

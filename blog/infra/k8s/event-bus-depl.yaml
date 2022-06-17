@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: event-bus-depl
+spec:
+  replicas: 1 # pod的数量
+  selector: # 识别template中的命名，做绑定
+    matchLabels:
+      app: event-bus
+  template: #命名
+    metadata:
+      labels:
+        app: event-bus
+    spec: # pod的配置
+      containers:
+        - name: event-bus
+          image: ricardo0816/event-bus # default = latest
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: event-bus-srv
+spec:
+  selector:
+    app: event-bus
+  type: ClusterIP # 默认值 不需要写出
+  ports:
+    - name: event-bus
+      protocol: TCP
+      port: 4005
+      targetPort: 4005

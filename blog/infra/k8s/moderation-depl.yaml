@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: moderation-depl
+spec:
+  replicas: 1 # pod的数量
+  selector: # 识别template中的命名，做绑定
+    matchLabels:
+      app: moderation
+  template: #命名
+    metadata:
+      labels:
+        app: moderation
+    spec: # pod的配置
+      containers:
+        - name: moderation
+          image: ricardo0816/moderation # default = latest
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: moderation-srv
+spec:
+  selector:
+    app: moderation
+  type: ClusterIP # 默认值 不需要写出
+  ports:
+    - name: moderation
+      protocol: TCP
+      port: 4003
+      targetPort: 4003
