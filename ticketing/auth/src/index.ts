@@ -1,13 +1,22 @@
-import express from "express";
-import { json } from "body-parser";
+import mongoose from "mongoose";
+import { app } from "./app";
 
-const app = express();
-app.use(json());
+const start = async () => {
+  if (!process.env.JWT_KEY) {
+    throw new Error("JWT_KEY not found");
+  }
 
-app.get("/api/users/currentuser", (req, res) => {
-  res.send("Hi there!");
-});
+  console.log("Connecting to MongoDB!");
+  try {
+    await mongoose.connect("mongodb://auth-mongo-srv:27017/auth");
+    console.log("Connected to MongoDB!");
+  } catch (err) {
+    console.error(err);
+  }
 
-app.listen(3000, () => {
-  console.log("listening on port 3000!!!");
-});
+  app.listen(3000, () => {
+    console.log("listening on port 3000!!!");
+  });
+};
+
+start();
