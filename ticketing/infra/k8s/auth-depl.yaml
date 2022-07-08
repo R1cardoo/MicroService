@@ -16,6 +16,8 @@ spec:
         - name: auth
           image: ricardo0816/auth
           env: #环境变量
+            - name: MONGO_URI
+              value: "mongodb://auth-mongo-srv:27017/auth"
             - name: JWT_KEY
               valueFrom:
                 secretKeyRef:

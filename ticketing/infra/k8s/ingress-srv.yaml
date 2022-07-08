@@ -11,6 +11,13 @@ spec:
     - host: ticketing.dev #选中域名
       http:
         paths:
+          - path: /api/payments/?(.*)
+            pathType: Exact
+            backend:
+              service:
+                name: payments-srv
+                port:
+                  number: 3000
           - path: /api/users/?(.*)
             pathType: Exact
             backend:
@@ -18,7 +25,21 @@ spec:
                 name: auth-srv
                 port:
                   number: 3000
-          - path: /?(.*)
+          - path: /api/tickets/?(.*)
+            pathType: Exact
+            backend:
+              service:
+                name: tickets-srv
+                port:
+                  number: 3000
+          - path: /api/orders/?(.*)
+            pathType: Exact
+            backend:
+              service:
+                name: orders-srv
+                port:
+                  number: 3000
+          - path: /?(.*) # 放在最后，进行fallback
             pathType: Exact
             backend:
               service:
